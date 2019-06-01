@@ -1,6 +1,7 @@
 package com.example.netty.netty;
 
 import com.example.netty.common.CommonConfig;
+import com.example.netty.handler.FirstServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
@@ -36,13 +37,7 @@ public class NettyServer {
                     protected void initChannel(NioSocketChannel ch) {
                         log.info("取出childAttr属性:{}", ch.attr(CommonConfig.CLIENT_KEY).get());
 
-                        ch.pipeline().addLast(new StringDecoder());
-                        ch.pipeline().addLast(new SimpleChannelInboundHandler<String>() {
-                            @Override
-                            protected void channelRead0(ChannelHandlerContext ctx, String msg) {
-                                log.info(msg);
-                            }
-                        });
+                        ch.pipeline().addLast(new FirstServerHandler());
                     }
                 });
 
