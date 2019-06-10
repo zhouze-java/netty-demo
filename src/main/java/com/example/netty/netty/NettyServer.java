@@ -1,17 +1,14 @@
 package com.example.netty.netty;
 
 import com.example.netty.common.CommonConfig;
-import com.example.netty.handler.FirstServerHandler;
+import com.example.netty.login.ServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +34,7 @@ public class NettyServer {
                     protected void initChannel(NioSocketChannel ch) {
                         log.info("取出childAttr属性:{}", ch.attr(CommonConfig.CLIENT_KEY).get());
 
-                        ch.pipeline().addLast(new FirstServerHandler());
+                        ch.pipeline().addLast(new ServerHandler());
                     }
                 });
 
