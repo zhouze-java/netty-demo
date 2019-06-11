@@ -1,4 +1,4 @@
-package com.example.netty.packet;
+package com.example.netty.packet.login;
 
 import com.example.netty.packet.base.Packet;
 import com.example.netty.packet.command.Command;

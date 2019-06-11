@@ -1,7 +1,8 @@
 package com.example.netty.code;
 
-import com.example.netty.packet.LoginRequestPacket;
-import com.example.netty.packet.Packet;
+import com.example.netty.packet.login.LoginRequestPacket;
+import com.example.netty.packet.login.LoginResponsePacket;
+import com.example.netty.packet.base.Packet;
 import com.example.netty.serializer.JSONSerializer;
 import com.example.netty.serializer.Serializer;
 import io.netty.buffer.ByteBuf;
@@ -10,7 +11,8 @@ import io.netty.buffer.ByteBufAllocator;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.netty.packet.Command.LOGIN_REQUEST;
+import static com.example.netty.packet.command.Command.LOGIN_REQUEST;
+import static com.example.netty.packet.command.Command.LOGIN_RESPONSE;
 
 /**
  * @author 周泽

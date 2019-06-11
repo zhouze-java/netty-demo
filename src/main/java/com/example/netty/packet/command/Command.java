@@ -1,4 +1,4 @@
-package com.example.netty.packet;
+package com.example.netty.packet.command;
 
 /**
  * @author 周泽
@@ -8,9 +8,14 @@ package com.example.netty.packet;
 public interface Command {
 
     /**
-     * 登录命令
+     * 登录请求命令
      */
     Byte LOGIN_REQUEST = 1;
+
+    /**
+     * 登录响应命令
+     */
+    Byte LOGIN_RESPONSE = 1;
 
     /**
      * 客户端发送消息命令

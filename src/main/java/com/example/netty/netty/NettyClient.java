@@ -1,13 +1,13 @@
 package com.example.netty.netty;
 
 import com.example.netty.common.CommonConfig;
-import com.example.netty.login.ClientHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import com.example.netty.handler.login.ClientHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;
@@ -37,7 +37,7 @@ public class NettyClient {
                 });
 
         bootstrap
-                // attr() 给客户端的channel即NioServerSocketChannel指定一些自定义属性,通过channel.attr()取出该属性,给NioServerSocketChannel维护一个map
+                // attributes() 给客户端的channel即NioServerSocketChannel指定一些自定义属性,通过channel.attributes()取出该属性,给NioServerSocketChannel维护一个map
                 .attr(CommonConfig.CLIENT_NAME_KEY, CommonConfig.CLIENT_NAME_VALUE)
                 // option() 给连接设置一些 TCP 底层相关的属性
                 // ChannelOption.CONNECT_TIMEOUT_MILLIS 示连接的超时时间,超过这个时间还是建立不上的话则代表连接失败

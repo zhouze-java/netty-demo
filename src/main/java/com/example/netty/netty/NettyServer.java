@@ -1,7 +1,7 @@
 package com.example.netty.netty;
 
 import com.example.netty.common.CommonConfig;
-import com.example.netty.login.ServerHandler;
+import com.example.netty.handler.login.ServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -48,10 +48,10 @@ public class NettyServer {
                         log.info("服务端启动中...............");
                     }
                 })
-                // attr() 给服务端的channel即NioServerSocketChannel指定一些自定义属性,通过channel.attr()取出该属性,给NioServerSocketChannel维护一个map
+                // attributes() 给服务端的channel即NioServerSocketChannel指定一些自定义属性,通过channel.attributes()取出该属性,给NioServerSocketChannel维护一个map
                 .attr(CommonConfig.SERVER_NAME_KEY, CommonConfig.SERVER_NAME_VALUE)
 
-                // childAttr() 给每一条连接指定自定义属性,通过channel.attr()取出该属性,对应的是childHandler
+                // childAttr() 给每一条连接指定自定义属性,通过channel.attributes()取出该属性,对应的是childHandler
                 .childAttr(CommonConfig.CLIENT_KEY, CommonConfig.CLIENT_VALUE)
 
                 // childOption() 可以给每条连接设置一些TCP底层相关的属性

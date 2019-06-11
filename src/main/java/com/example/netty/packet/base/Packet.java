@@ -1,4 +1,4 @@
-package com.example.netty.packet;
+package com.example.netty.packet.base;
 
 import lombok.Data;
 

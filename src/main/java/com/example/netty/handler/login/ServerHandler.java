@@ -1,8 +1,9 @@
-package com.example.netty.login;
+package com.example.netty.handler.login;
 
-import com.example.netty.packet.LoginRequestPacket;
-import com.example.netty.packet.Packet;
 import com.example.netty.code.PacketCodeC;
+import com.example.netty.packet.login.LoginRequestPacket;
+import com.example.netty.packet.login.LoginResponsePacket;
+import com.example.netty.packet.base.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

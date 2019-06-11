@@ -1,11 +1,10 @@
-package com.example.netty.login;
+package com.example.netty.handler.login;
 
-import com.example.netty.packet.LoginRequestPacket;
-import com.example.netty.packet.Packet;
-import com.example.netty.code.LoginRequestPacket;
-import com.example.netty.code.LoginResponsePacket;
-import com.example.netty.code.Packet;
 import com.example.netty.code.PacketCodeC;
+import com.example.netty.packet.login.LoginRequestPacket;
+import com.example.netty.packet.login.LoginResponsePacket;
+import com.example.netty.packet.base.Packet;
+import com.example.netty.util.LoginUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -54,6 +53,9 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 
             if (loginResponsePacket.getSuccess()) {
                 log.info("登录成功....");
+
+                // 记录登录成功的标识
+                LoginUtil.markAsLogin(ctx.channel());
             } else {
                 log.info("登录失败,原因:{}", loginResponsePacket.getReason());
             }

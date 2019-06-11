@@ -1,9 +1,17 @@
 package com.example.netty.attributes;
 
+import io.netty.util.AttributeKey;
+
 /**
  * @author 周泽
  * @date Create in 11:21 2019/6/11
- * @Description
+ * @Description 针对channel的attr配置
  */
 public interface Attributes {
+
+    /**
+     * 客户端是否登录的标识
+     */
+    AttributeKey<Boolean> LOGIN = AttributeKey.newInstance("login");
+
 }
