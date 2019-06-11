@@ -1,5 +1,7 @@
 package com.example.netty.packet;
 
+import com.example.netty.packet.base.Packet;
+import com.example.netty.packet.command.Command;
 import lombok.Data;
 
 /**
@@ -8,17 +10,13 @@ import lombok.Data;
  * @Description 登录请求数据包
  */
 @Data
-public class LoginRequestPacket extends Packet{
+public class LoginRequestPacket extends Packet {
 
     private Integer userId;
 
     private String username;
 
     private String password;
-
-    private Boolean success;
-
-    private String reason;
 
     @Override
     public Byte getCommand() {

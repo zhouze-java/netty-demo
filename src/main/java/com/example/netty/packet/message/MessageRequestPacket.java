@@ -1,5 +1,7 @@
 package com.example.netty.packet;
 
+import com.example.netty.packet.base.Packet;
+import com.example.netty.packet.command.Command;
 import lombok.Data;
 
 /**
