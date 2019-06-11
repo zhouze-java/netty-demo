@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.example.netty.code.Command.LOGIN_REQUEST;
+import static com.example.netty.code.Command.LOGIN_RESPONSE;
 
 /**
  * @author 周泽
@@ -27,6 +28,7 @@ public class PacketCodeC {
     private PacketCodeC() {
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
+        packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();

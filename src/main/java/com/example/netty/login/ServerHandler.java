@@ -1,6 +1,7 @@
 package com.example.netty.login;
 
 import com.example.netty.code.LoginRequestPacket;
+import com.example.netty.code.LoginResponsePacket;
 import com.example.netty.code.Packet;
 import com.example.netty.code.PacketCodeC;
 import io.netty.buffer.ByteBuf;
@@ -26,19 +27,21 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         if (packet instanceof LoginRequestPacket) {
             LoginRequestPacket loginRequestPacket = (LoginRequestPacket) packet;
 
+            LoginResponsePacket loginResponsePacket = new LoginResponsePacket();
+            loginRequestPacket.setVersion(loginRequestPacket.getVersion());
+
             // 校验用户名密码
             if (valid(loginRequestPacket)) {
                 // 登录成功
-                loginRequestPacket.setSuccess(true);
-
+                loginResponsePacket.setSuccess(true);
             } else {
                 // 登录失败
-                loginRequestPacket.setSuccess(false);
-                loginRequestPacket.setReason("密码错误");
+                loginResponsePacket.setSuccess(false);
+                loginResponsePacket.setReason("账号密码错误");
             }
 
             // 编码返回给客户端
-            ByteBuf responseBuffer = PacketCodeC.INSTANCE.encode(ctx.alloc(), loginRequestPacket);
+            ByteBuf responseBuffer = PacketCodeC.INSTANCE.encode(ctx.alloc(), loginResponsePacket);
             ctx.channel().writeAndFlush(responseBuffer);
 
         }

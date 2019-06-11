@@ -1,6 +1,7 @@
 package com.example.netty.login;
 
 import com.example.netty.code.LoginRequestPacket;
+import com.example.netty.code.LoginResponsePacket;
 import com.example.netty.code.Packet;
 import com.example.netty.code.PacketCodeC;
 import io.netty.buffer.ByteBuf;
@@ -46,13 +47,13 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         Packet packet = PacketCodeC.INSTANCE.decode(byteBuf);
 
         // 判断是不是登录请求数据包
-        if (packet instanceof LoginRequestPacket) {
-            LoginRequestPacket loginRequestPacket = (LoginRequestPacket) packet;
+        if (packet instanceof LoginResponsePacket) {
+            LoginResponsePacket loginResponsePacket = (LoginResponsePacket) packet;
 
-            if (loginRequestPacket.getSuccess()) {
+            if (loginResponsePacket.getSuccess()) {
                 log.info("登录成功....");
             } else {
-                log.info("登录失败,原因:{}", loginRequestPacket.getReason());
+                log.info("登录失败,原因:{}", loginResponsePacket.getReason());
             }
 
         }
