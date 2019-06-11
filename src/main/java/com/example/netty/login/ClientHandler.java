@@ -1,7 +1,7 @@
 package com.example.netty.login;
 
-import com.example.netty.code.LoginRequestPacket;
-import com.example.netty.code.Packet;
+import com.example.netty.packet.LoginRequestPacket;
+import com.example.netty.packet.Packet;
 import com.example.netty.code.PacketCodeC;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
