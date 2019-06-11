@@ -64,7 +64,6 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         } else if (packet instanceof MessageResponsePacket) {
             MessageResponsePacket messageResponsePacket = (MessageResponsePacket) packet;
             log.info("收到了服务端发来的消息:{}", messageResponsePacket.getMessage());
-
         }
     }
 }

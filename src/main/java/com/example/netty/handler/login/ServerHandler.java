@@ -39,14 +39,18 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
             // 校验用户名密码
             if (valid(loginRequestPacket)) {
+                log.info("客户端登录成功....");
                 // 登录成功
                 loginResponsePacket.setSuccess(true);
             } else {
+                log.info("客户端登录失败");
+
                 // 登录失败
                 loginResponsePacket.setSuccess(false);
                 loginResponsePacket.setReason("账号密码错误");
             }
 
+            log.info("服务端发送登录响应数据包给客户端....");
             // 编码返回给客户端
             ByteBuf responseBuffer = PacketCodeC.INSTANCE.encode(ctx.alloc(), loginResponsePacket);
             ctx.channel().writeAndFlush(responseBuffer);

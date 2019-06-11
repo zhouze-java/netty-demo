@@ -90,6 +90,7 @@ public class NettyClient {
             while (!Thread.interrupted()) {
                 // 判断是否已经登录
                 if (LoginUtil.hasLogin(channel)) {
+                    log.info("当前客户端已经登录,请输入要发送的消息...");
                     // 然后接收用户输入的数据
                     Scanner sc = new Scanner(System.in);
                     String line = sc.nextLine();
