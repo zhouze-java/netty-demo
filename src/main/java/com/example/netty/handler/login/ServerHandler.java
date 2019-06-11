@@ -4,15 +4,22 @@ import com.example.netty.code.PacketCodeC;
 import com.example.netty.packet.login.LoginRequestPacket;
 import com.example.netty.packet.login.LoginResponsePacket;
 import com.example.netty.packet.base.Packet;
+import com.example.netty.packet.message.MessageRequestPacket;
+import com.example.netty.packet.message.MessageResponsePacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import lombok.extern.slf4j.Slf4j;
+import sun.rmi.runtime.Log;
+
+import java.util.Date;
 
 /**
  * @author 周泽
  * @date Create in 14:46 2019/6/10
  * @Description 服务端逻辑处理器
  */
+@Slf4j
 public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
@@ -42,6 +49,17 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
             // 编码返回给客户端
             ByteBuf responseBuffer = PacketCodeC.INSTANCE.encode(ctx.alloc(), loginResponsePacket);
+            ctx.channel().writeAndFlush(responseBuffer);
+
+        } else if (packet instanceof MessageRequestPacket){
+            // 处理客户端发过来的消息
+            MessageRequestPacket messageRequestPacket = (MessageRequestPacket) packet;
+            log.info("{}:收到客户端发过来的消息:{}", new Date(), messageRequestPacket.getMessage());
+
+            // 然后服务端发消息给客户端
+            MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
+            messageResponsePacket.setMessage("服务端收到了[" + messageRequestPacket.getMessage() + "]这条消息");
+            ByteBuf responseBuffer = PacketCodeC.INSTANCE.encode(ctx.alloc(), messageResponsePacket);
             ctx.channel().writeAndFlush(responseBuffer);
 
         }

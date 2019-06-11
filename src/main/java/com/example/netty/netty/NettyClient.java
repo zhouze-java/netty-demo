@@ -1,7 +1,13 @@
 package com.example.netty.netty;
 
+import com.example.netty.code.PacketCodeC;
 import com.example.netty.common.CommonConfig;
+import com.example.netty.packet.message.MessageRequestPacket;
+import com.example.netty.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -10,6 +16,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import com.example.netty.handler.login.ClientHandler;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -57,6 +64,11 @@ public class NettyClient {
         bootstrap.connect(host, port).addListener(future -> {
             if (future.isSuccess()) {
                 log.info("连接成功");
+
+                // 启动控制台线程
+                Channel channel = ((ChannelFuture) future).channel();
+                startConsoleThread(channel);
+
             } else if (retry == 0) {
                 log.info("重试次数已经用完了,连接失败");
             } else {
@@ -70,5 +82,28 @@ public class NettyClient {
                         .schedule(() -> connect(bootstrap, host, port, retry - 1), delay, TimeUnit.SECONDS);
             }
         });
+    }
+
+    public static void startConsoleThread(Channel channel) {
+        new Thread(() -> {
+            // 线程没有被中断就继续循环
+            while (!Thread.interrupted()) {
+                // 判断是否已经登录
+                if (LoginUtil.hasLogin(channel)) {
+                    // 然后接收用户输入的数据
+                    Scanner sc = new Scanner(System.in);
+                    String line = sc.nextLine();
+
+                    // 封装到数据包里,然后转码发送给服务端
+                    MessageRequestPacket messageRequestPacket = new MessageRequestPacket();
+                    messageRequestPacket.setMessage(line);
+
+                    // 编码
+                    ByteBuf buffer = PacketCodeC.INSTANCE.encode(channel.alloc(), messageRequestPacket);
+                    // 发送
+                    channel.writeAndFlush(buffer);
+                }
+            }
+        }).start();
     }
 }

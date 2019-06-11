@@ -4,6 +4,7 @@ import com.example.netty.code.PacketCodeC;
 import com.example.netty.packet.login.LoginRequestPacket;
 import com.example.netty.packet.login.LoginResponsePacket;
 import com.example.netty.packet.base.Packet;
+import com.example.netty.packet.message.MessageResponsePacket;
 import com.example.netty.util.LoginUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -59,6 +60,10 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
             } else {
                 log.info("登录失败,原因:{}", loginResponsePacket.getReason());
             }
+
+        } else if (packet instanceof MessageResponsePacket) {
+            MessageResponsePacket messageResponsePacket = (MessageResponsePacket) packet;
+            log.info("收到了服务端发来的消息:{}", messageResponsePacket.getMessage());
 
         }
     }
