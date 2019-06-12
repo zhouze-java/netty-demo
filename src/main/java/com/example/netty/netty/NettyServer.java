@@ -1,7 +1,13 @@
 package com.example.netty.netty;
 
 import com.example.netty.common.CommonConfig;
+import com.example.netty.handler.inbound.InBoundHandlerA;
+import com.example.netty.handler.inbound.InBoundHandlerB;
+import com.example.netty.handler.inbound.InBoundHandlerC;
 import com.example.netty.handler.login.ServerHandler;
+import com.example.netty.handler.outbound.OutBoundHandlerA;
+import com.example.netty.handler.outbound.OutBoundHandlerB;
+import com.example.netty.handler.outbound.OutBoundHandlerC;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -34,7 +40,14 @@ public class NettyServer {
                     protected void initChannel(NioSocketChannel ch) {
                         log.info("取出childAttr属性:{}", ch.attr(CommonConfig.CLIENT_KEY).get());
 
-                        ch.pipeline().addLast(new ServerHandler());
+//                        ch.pipeline().addLast(new ServerHandler());
+                        ch.pipeline().addLast(new InBoundHandlerA());
+                        ch.pipeline().addLast(new InBoundHandlerB());
+                        ch.pipeline().addLast(new InBoundHandlerC());
+
+                        ch.pipeline().addLast(new OutBoundHandlerA());
+                        ch.pipeline().addLast(new OutBoundHandlerB());
+                        ch.pipeline().addLast(new OutBoundHandlerC());
                     }
                 });
 
