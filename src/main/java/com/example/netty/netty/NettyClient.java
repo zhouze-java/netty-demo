@@ -1,7 +1,11 @@
 package com.example.netty.netty;
 
 import com.example.netty.code.PacketCodeC;
+import com.example.netty.code.PacketDecoder;
+import com.example.netty.code.PacketEncoder;
 import com.example.netty.common.CommonConfig;
+import com.example.netty.handler.login.LoginResponseHandler;
+import com.example.netty.handler.message.MessageResponseHandler;
 import com.example.netty.packet.message.MessageRequestPacket;
 import com.example.netty.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
@@ -13,7 +17,6 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import com.example.netty.handler.login.ClientHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Scanner;
@@ -39,7 +42,10 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
-                        socketChannel.pipeline().addLast(new ClientHandler());
+                        socketChannel.pipeline().addLast(new PacketDecoder())
+                                .addLast(new LoginResponseHandler())
+                                .addLast(new MessageResponseHandler())
+                                .addLast(new PacketEncoder());
                     }
                 });
 
@@ -99,10 +105,7 @@ public class NettyClient {
                     MessageRequestPacket messageRequestPacket = new MessageRequestPacket();
                     messageRequestPacket.setMessage(line);
 
-                    // 编码
-                    ByteBuf buffer = PacketCodeC.INSTANCE.encode(channel.alloc(), messageRequestPacket);
-                    // 发送
-                    channel.writeAndFlush(buffer);
+                    channel.writeAndFlush(messageRequestPacket);
                 }
             }
         }).start();
