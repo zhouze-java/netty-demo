@@ -37,7 +37,8 @@ public class NettyServer {
                     protected void initChannel(NioSocketChannel ch) {
                         log.info("取出childAttr属性:{}", ch.attr(CommonConfig.CLIENT_KEY).get());
 
-                        ch.pipeline().addLast(new PacketDecoder())
+                        ch.pipeline()
+                                .addLast(new PacketDecoder())
                                 .addLast(new LoginRequestHandler())
                                 .addLast(new MessageRequestHandler())
                                 .addLast(new PacketEncoder());

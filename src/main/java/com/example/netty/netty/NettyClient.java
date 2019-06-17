@@ -1,6 +1,5 @@
 package com.example.netty.netty;
 
-import com.example.netty.code.PacketCodeC;
 import com.example.netty.code.PacketDecoder;
 import com.example.netty.code.PacketEncoder;
 import com.example.netty.common.CommonConfig;
@@ -9,7 +8,6 @@ import com.example.netty.handler.message.MessageResponseHandler;
 import com.example.netty.packet.message.MessageRequestPacket;
 import com.example.netty.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -42,7 +40,8 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
-                        socketChannel.pipeline().addLast(new PacketDecoder())
+                        socketChannel.pipeline()
+                                .addLast(new PacketDecoder())
                                 .addLast(new LoginResponseHandler())
                                 .addLast(new MessageResponseHandler())
                                 .addLast(new PacketEncoder());
