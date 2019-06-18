@@ -2,6 +2,7 @@ package com.example.netty.netty;
 
 import com.example.netty.code.PacketDecoder;
 import com.example.netty.code.PacketEncoder;
+import com.example.netty.code.Spliter;
 import com.example.netty.common.CommonConfig;
 import com.example.netty.handler.login.LoginResponseHandler;
 import com.example.netty.handler.message.MessageResponseHandler;
@@ -41,6 +42,7 @@ public class NettyClient {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         socketChannel.pipeline()
+                                .addLast(new Spliter())
                                 .addLast(new PacketDecoder())
                                 .addLast(new LoginResponseHandler())
                                 .addLast(new MessageResponseHandler())

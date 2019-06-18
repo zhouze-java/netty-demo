@@ -2,6 +2,7 @@ package com.example.netty.netty;
 
 import com.example.netty.code.PacketDecoder;
 import com.example.netty.code.PacketEncoder;
+import com.example.netty.code.Spliter;
 import com.example.netty.common.CommonConfig;
 import com.example.netty.handler.login.LoginRequestHandler;
 import com.example.netty.handler.message.MessageRequestHandler;
@@ -38,6 +39,7 @@ public class NettyServer {
                         log.info("取出childAttr属性:{}", ch.attr(CommonConfig.CLIENT_KEY).get());
 
                         ch.pipeline()
+                                .addLast(new Spliter())
                                 .addLast(new PacketDecoder())
                                 .addLast(new LoginRequestHandler())
                                 .addLast(new MessageRequestHandler())

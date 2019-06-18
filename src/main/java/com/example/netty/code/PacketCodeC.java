@@ -22,7 +22,7 @@ import static com.example.netty.packet.command.Command.*;
  */
 public class PacketCodeC {
 
-    private static final int MAGIC_NUMBER = 0x12345678;
+    public static final int MAGIC_NUMBER = 0x12345678;
 
     private final Map<Byte, Class<? extends Packet>> packetTypeMap;
     private final Map<Byte, Serializer> serializerMap;
