@@ -1,9 +1,7 @@
 package com.example.netty.handler.message;
 
-import com.example.netty.code.PacketCodeC;
 import com.example.netty.packet.message.MessageRequestPacket;
 import com.example.netty.packet.message.MessageResponsePacket;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
