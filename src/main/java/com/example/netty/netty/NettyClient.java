@@ -95,19 +95,16 @@ public class NettyClient {
         new Thread(() -> {
             // 线程没有被中断就继续循环
             while (!Thread.interrupted()) {
-                // 判断是否已经登录
-                if (LoginUtil.hasLogin(channel)) {
-                    log.info("当前客户端已经登录,请输入要发送的消息...");
-                    // 然后接收用户输入的数据
-                    Scanner sc = new Scanner(System.in);
-                    String line = sc.nextLine();
+                log.info("当前客户端已经登录,请输入要发送的消息...");
+                // 然后接收用户输入的数据
+                Scanner sc = new Scanner(System.in);
+                String line = sc.nextLine();
 
-                    // 封装到数据包里,然后转码发送给服务端
-                    MessageRequestPacket messageRequestPacket = new MessageRequestPacket();
-                    messageRequestPacket.setMessage(line);
+                // 封装到数据包里,然后转码发送给服务端
+                MessageRequestPacket messageRequestPacket = new MessageRequestPacket();
+                messageRequestPacket.setMessage(line);
 
-                    channel.writeAndFlush(messageRequestPacket);
-                }
+                channel.writeAndFlush(messageRequestPacket);
             }
         }).start();
     }

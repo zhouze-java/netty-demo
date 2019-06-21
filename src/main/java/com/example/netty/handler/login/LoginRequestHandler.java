@@ -2,6 +2,7 @@ package com.example.netty.handler.login;
 
 import com.example.netty.packet.login.LoginRequestPacket;
 import com.example.netty.packet.login.LoginResponsePacket;
+import com.example.netty.util.LoginUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,9 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             log.info("客户端登录成功....");
             // 登录成功
             loginResponsePacket.setSuccess(true);
+
+            // 记录登录成功的标识
+            LoginUtil.markAsLogin(channelHandlerContext.channel());
         } else {
             log.info("客户端登录失败");
 

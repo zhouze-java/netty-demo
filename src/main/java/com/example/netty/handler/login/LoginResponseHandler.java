@@ -39,9 +39,6 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
 
         if (loginResponsePacket.getSuccess()) {
             log.info("登录成功....");
-
-            // 记录登录成功的标识
-            LoginUtil.markAsLogin(channelHandlerContext.channel());
         } else {
             log.info("登录失败,原因:{}", loginResponsePacket.getReason());
         }
