@@ -15,7 +15,7 @@ public class MessageResponseHandler extends SimpleChannelInboundHandler<MessageR
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageResponsePacket messageResponsePacket) throws Exception {
-        log.info("收到了服务端发来的消息:{}", messageResponsePacket.getMessage());
+        log.info("收到消息.. 用户id:[{}], 用户名:[{}], 消息内容:[{}]", messageResponsePacket.getFromUserId(), messageResponsePacket.getFromUserName(), messageResponsePacket.getMessage());
     }
 
 }

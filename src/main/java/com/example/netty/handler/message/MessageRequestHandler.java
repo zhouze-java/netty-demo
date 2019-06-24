@@ -2,6 +2,9 @@ package com.example.netty.handler.message;
 
 import com.example.netty.packet.message.MessageRequestPacket;
 import com.example.netty.packet.message.MessageResponsePacket;
+import com.example.netty.session.Session;
+import com.example.netty.util.SessionUtil;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -18,13 +21,24 @@ public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRe
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageRequestPacket messageRequestPacket) throws Exception {
-        log.info("{}:收到客户端发过来的消息:{}", new Date(), messageRequestPacket.getMessage());
+        // 拿到消息发送方的会话信息
+        Session session = SessionUtil.getSession(channelHandlerContext.channel());
 
-        // 然后服务端发消息给客户端
+        // 通过消息发送方的会话信息构造要发送的消息
         MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
-        messageResponsePacket.setMessage("服务端收到了[" + messageRequestPacket.getMessage() + "]这条消息");
+        messageResponsePacket.setMessage(messageRequestPacket.getMessage());
+        messageResponsePacket.setFromUserId(session.getUserId());
+        messageResponsePacket.setFromUserName(session.getUserName());
 
-        channelHandlerContext.channel().writeAndFlush(messageResponsePacket);
+        // 通过用户id去拿到消息接收方的channel
+        Channel toUserChannel = SessionUtil.getChannel(messageRequestPacket.getToUserId());
+
+        // 把消息传给发送方
+        if (null != toUserChannel && SessionUtil.hasLogin(toUserChannel)) {
+            toUserChannel.writeAndFlush(messageResponsePacket);
+        } else {
+            log.info("[{}]不在线,消息无法发送", messageRequestPacket.getToUserId());
+        }
     }
 
 }

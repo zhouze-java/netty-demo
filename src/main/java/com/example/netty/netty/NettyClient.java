@@ -4,10 +4,13 @@ import com.example.netty.code.PacketDecoder;
 import com.example.netty.code.PacketEncoder;
 import com.example.netty.code.Spliter;
 import com.example.netty.common.CommonConfig;
+import com.example.netty.handler.login.LoginRequestHandler;
 import com.example.netty.handler.login.LoginResponseHandler;
 import com.example.netty.handler.message.MessageResponseHandler;
+import com.example.netty.packet.login.LoginRequestPacket;
 import com.example.netty.packet.message.MessageRequestPacket;
 import com.example.netty.util.LoginUtil;
+import com.example.netty.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -92,20 +95,44 @@ public class NettyClient {
     }
 
     public static void startConsoleThread(Channel channel) {
+        Scanner sc = new Scanner(System.in);
+        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+
         new Thread(() -> {
             // 线程没有被中断就继续循环
             while (!Thread.interrupted()) {
-                log.info("当前客户端已经登录,请输入要发送的消息...");
-                // 然后接收用户输入的数据
-                Scanner sc = new Scanner(System.in);
-                String line = sc.nextLine();
+                // 如果没有登陆的话,先登陆
+                if (!SessionUtil.hasLogin(channel)){
+                    log.info("请输入用户名:...");
+                    // 然后接收用户输入的数据
+                    String userName = sc.nextLine();
+                    loginRequestPacket.setUserName(userName);
+                    loginRequestPacket.setPassword("123456");
 
-                // 封装到数据包里,然后转码发送给服务端
-                MessageRequestPacket messageRequestPacket = new MessageRequestPacket();
-                messageRequestPacket.setMessage(line);
+                    channel.writeAndFlush(loginRequestPacket);
 
-                channel.writeAndFlush(messageRequestPacket);
+                    waitForLoginResponse();
+                } else {
+                    // 登陆过了,那就是要发消息了
+                    String toUserId = sc.nextLine();
+                    String message = sc.nextLine();
+
+                    MessageRequestPacket messageRequestPacket = new MessageRequestPacket();
+                    messageRequestPacket.setToUserId(toUserId);
+                    messageRequestPacket.setMessage(message);
+                    channel.writeAndFlush(messageRequestPacket);
+                }
+
+
+
             }
         }).start();
+    }
+
+    private static void waitForLoginResponse() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ignored) {
+        }
     }
 }

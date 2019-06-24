@@ -1,5 +1,6 @@
 package com.example.netty.attributes;
 
+import com.example.netty.session.Session;
 import io.netty.util.AttributeKey;
 
 /**
@@ -14,4 +15,8 @@ public interface Attributes {
      */
     AttributeKey<Boolean> LOGIN = AttributeKey.newInstance("login");
 
+    /**
+     * 登录标识
+     */
+    AttributeKey<Session> SESSION = AttributeKey.newInstance("session");
 }

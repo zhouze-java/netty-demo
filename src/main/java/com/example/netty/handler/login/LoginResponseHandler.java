@@ -20,21 +20,6 @@ import java.util.Date;
 public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginResponsePacket> {
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        log.info("{},客户端开始登录...", new Date());
-
-        // 创建登录的对象
-        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
-
-        loginRequestPacket.setUsername("zhangsan");
-        loginRequestPacket.setPassword("123456");
-        loginRequestPacket.setUserId(1);
-
-        // 写到服务端
-        ctx.channel().writeAndFlush(loginRequestPacket);
-    }
-
-    @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, LoginResponsePacket loginResponsePacket) throws Exception {
 
         if (loginResponsePacket.getSuccess()) {

@@ -2,12 +2,15 @@ package com.example.netty.handler.login;
 
 import com.example.netty.packet.login.LoginRequestPacket;
 import com.example.netty.packet.login.LoginResponsePacket;
+import com.example.netty.session.Session;
 import com.example.netty.util.LoginUtil;
+import com.example.netty.util.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author 周泽
@@ -22,16 +25,19 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         log.info("{}: 客户端收到登录请求....", new Date());
 
         LoginResponsePacket loginResponsePacket = new LoginResponsePacket();
-        loginRequestPacket.setVersion(loginRequestPacket.getVersion());
+        loginResponsePacket.setVersion(loginRequestPacket.getVersion());
+        loginResponsePacket.setUserName(loginRequestPacket.getUserName());
 
         // 校验用户名密码
         if (valid(loginRequestPacket)) {
-            log.info("客户端登录成功....");
+            log.info("客户端[{}]登录成功....", loginRequestPacket.getUserName());
             // 登录成功
             loginResponsePacket.setSuccess(true);
-
+            // 分配一个随机的userId
+            String userId = randomUserId();
+            loginResponsePacket.setUserId(userId);
             // 记录登录成功的标识
-            LoginUtil.markAsLogin(channelHandlerContext.channel());
+            SessionUtil.bindSession(new Session(userId, loginRequestPacket.getUserName()), channelHandlerContext.channel());
         } else {
             log.info("客户端登录失败");
 
@@ -50,4 +56,17 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         return true;
     }
 
+    public static String randomUserId(){
+        return UUID.randomUUID().toString().split("-")[0];
+    }
+
+    /**
+     * 客户端连接被关闭的时候,解绑session
+     * @param ctx
+     * @throws Exception
+     */
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        SessionUtil.unBindSession(ctx.channel());
+    }
 }
