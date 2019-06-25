@@ -4,12 +4,12 @@ import com.example.netty.code.PacketDecoder;
 import com.example.netty.code.PacketEncoder;
 import com.example.netty.code.Spliter;
 import com.example.netty.common.CommonConfig;
-import com.example.netty.handler.login.LoginRequestHandler;
+import com.example.netty.console.ConsoleCommandManager;
+import com.example.netty.console.LoginConsoleCommand;
+import com.example.netty.handler.group.CreateGroupResponseHandler;
 import com.example.netty.handler.login.LoginResponseHandler;
+import com.example.netty.handler.logout.LogoutResponseHandler;
 import com.example.netty.handler.message.MessageResponseHandler;
-import com.example.netty.packet.login.LoginRequestPacket;
-import com.example.netty.packet.message.MessageRequestPacket;
-import com.example.netty.util.LoginUtil;
 import com.example.netty.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -48,7 +48,9 @@ public class NettyClient {
                                 .addLast(new Spliter())
                                 .addLast(new PacketDecoder())
                                 .addLast(new LoginResponseHandler())
+                                .addLast(new LogoutResponseHandler())
                                 .addLast(new MessageResponseHandler())
+                                .addLast(new CreateGroupResponseHandler())
                                 .addLast(new PacketEncoder());
                     }
                 });
@@ -95,35 +97,20 @@ public class NettyClient {
     }
 
     public static void startConsoleThread(Channel channel) {
-        Scanner sc = new Scanner(System.in);
-        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+        ConsoleCommandManager consoleCommandManager = new ConsoleCommandManager();
+        LoginConsoleCommand loginConsoleCommand = new LoginConsoleCommand();
+        Scanner scanner = new Scanner(System.in);
+
 
         new Thread(() -> {
             // 线程没有被中断就继续循环
             while (!Thread.interrupted()) {
                 // 如果没有登陆的话,先登陆
-                if (!SessionUtil.hasLogin(channel)){
-                    log.info("请输入用户名:...");
-                    // 然后接收用户输入的数据
-                    String userName = sc.nextLine();
-                    loginRequestPacket.setUserName(userName);
-                    loginRequestPacket.setPassword("123456");
-
-                    channel.writeAndFlush(loginRequestPacket);
-
-                    waitForLoginResponse();
+                if (!SessionUtil.hasLogin(channel)) {
+                    loginConsoleCommand.exec(scanner, channel);
                 } else {
-                    // 登陆过了,那就是要发消息了
-                    String toUserId = sc.nextLine();
-                    String message = sc.nextLine();
-
-                    MessageRequestPacket messageRequestPacket = new MessageRequestPacket();
-                    messageRequestPacket.setToUserId(toUserId);
-                    messageRequestPacket.setMessage(message);
-                    channel.writeAndFlush(messageRequestPacket);
+                    consoleCommandManager.exec(scanner, channel);
                 }
-
-
 
             }
         }).start();

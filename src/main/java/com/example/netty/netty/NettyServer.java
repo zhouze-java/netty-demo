@@ -5,9 +5,12 @@ import com.example.netty.code.PacketEncoder;
 import com.example.netty.code.Spliter;
 import com.example.netty.common.CommonConfig;
 import com.example.netty.handler.auth.AuthHandler;
+import com.example.netty.handler.group.CreateGroupRequestHandler;
 import com.example.netty.handler.life.LifeCycleTestHandler;
 import com.example.netty.handler.login.LoginRequestHandler;
+import com.example.netty.handler.logout.LogoutRequestHandler;
 import com.example.netty.handler.message.MessageRequestHandler;
+import com.example.netty.packet.logout.LogoutRequestPacket;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -46,6 +49,8 @@ public class NettyServer {
                                 .addLast(new LoginRequestHandler())
                                 .addLast(new AuthHandler())
                                 .addLast(new MessageRequestHandler())
+                                .addLast(new CreateGroupRequestHandler())
+                                .addLast(new LogoutRequestHandler())
                                 .addLast(new PacketEncoder());
                     }
                 });

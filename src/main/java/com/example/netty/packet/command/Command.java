@@ -26,4 +26,25 @@ public interface Command {
      * 服务端响应发送消息命令
      */
     Byte MESSAGE_RESPONSE = 4;
+
+    /**
+     * 客户端注销命令
+     */
+    Byte LOGOUT_REQUEST = 5;
+
+    /**
+     * 客户端注销响应
+     */
+    Byte LOGOUT_RESPONSE = 6;
+
+    /**
+     * 创建群聊请求
+     */
+    Byte CREATE_GROUP_REQUEST = 7;
+
+    /**
+     * 创建群聊响应
+     */
+    Byte CREATE_GROUP_RESPONSE = 8;
+
 }
