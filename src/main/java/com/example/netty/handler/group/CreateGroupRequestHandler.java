@@ -5,6 +5,7 @@ import com.example.netty.packet.group.CreateGroupResponsePacket;
 import com.example.netty.util.IDUtil;
 import com.example.netty.util.SessionUtil;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
@@ -20,7 +21,12 @@ import java.util.List;
  * @Description 创建群聊处理
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<CreateGroupRequestPacket> {
+
+    public static final CreateGroupRequestHandler INSTANCE  = new CreateGroupRequestHandler();
+
+    protected CreateGroupRequestHandler(){}
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, CreateGroupRequestPacket createGroupRequestPacket) throws Exception {

@@ -1,6 +1,7 @@
 package com.example.netty.handler.auth;
 
 import com.example.netty.util.LoginUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,12 @@ import lombok.extern.slf4j.Slf4j;
  * @Description 验证是否登录
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class AuthHandler extends ChannelInboundHandlerAdapter {
+
+    public static final AuthHandler INSTANCE = new AuthHandler();
+
+    protected AuthHandler(){}
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {

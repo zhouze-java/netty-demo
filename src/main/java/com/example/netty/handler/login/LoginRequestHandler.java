@@ -5,6 +5,7 @@ import com.example.netty.packet.login.LoginResponsePacket;
 import com.example.netty.session.Session;
 import com.example.netty.util.LoginUtil;
 import com.example.netty.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,13 @@ import java.util.UUID;
  * @Description 客户端登录请求逻辑处理器
  */
 @Slf4j
+@ChannelHandler.Sharable
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
+
+    public static final LoginRequestHandler INSTANCE = new LoginRequestHandler();
+
+    protected LoginRequestHandler() {
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, LoginRequestPacket loginRequestPacket) throws Exception {

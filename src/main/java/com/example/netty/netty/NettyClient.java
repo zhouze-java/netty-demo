@@ -1,7 +1,5 @@
 package com.example.netty.netty;
 
-import com.example.netty.code.PacketDecoder;
-import com.example.netty.code.PacketEncoder;
 import com.example.netty.code.Spliter;
 import com.example.netty.common.CommonConfig;
 import com.example.netty.console.ConsoleCommandManager;
@@ -46,12 +44,12 @@ public class NettyClient {
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         socketChannel.pipeline()
                                 .addLast(new Spliter())
-                                .addLast(new PacketDecoder())
+                                .addLast(PacketDecoder.INSTANCE)
                                 .addLast(new LoginResponseHandler())
                                 .addLast(new LogoutResponseHandler())
                                 .addLast(new MessageResponseHandler())
                                 .addLast(new CreateGroupResponseHandler())
-                                .addLast(new PacketEncoder());
+                                .addLast(PacketEncoder.INSTANCE);
                     }
                 });
 
