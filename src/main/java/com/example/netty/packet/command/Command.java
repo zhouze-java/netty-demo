@@ -47,4 +47,14 @@ public interface Command {
      */
     Byte CREATE_GROUP_RESPONSE = 8;
 
+    /**
+     * 客户端心跳请求
+     */
+    Byte HEARTBEAT_REQUEST = 9;
+
+    /**
+     * 服务端心跳响应
+     */
+    Byte HEARTBEAT_RESPONSE = 10;
+
 }

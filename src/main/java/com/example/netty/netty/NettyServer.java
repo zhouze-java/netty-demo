@@ -4,11 +4,11 @@ import com.example.netty.code.Spliter;
 import com.example.netty.common.CommonConfig;
 import com.example.netty.handler.auth.AuthHandler;
 import com.example.netty.handler.code.PacketCodecHandler;
-import com.example.netty.handler.group.CreateGroupRequestHandler;
+import com.example.netty.handler.heart.HeartBeatRequestHandler;
 import com.example.netty.handler.im.IMHandler;
+import com.example.netty.handler.im.IMIdleStateHandler;
 import com.example.netty.handler.login.LoginRequestHandler;
-import com.example.netty.handler.logout.LogoutRequestHandler;
-import com.example.netty.handler.message.MessageRequestHandler;
+import com.example.netty.packet.heart.HeartBeatRequestPacket;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -42,9 +42,11 @@ public class NettyServer {
                         log.info("取出childAttr属性:{}", ch.attr(CommonConfig.CLIENT_KEY).get());
 
                         ch.pipeline()
+                                .addLast(new IMIdleStateHandler())
                                 .addLast(new Spliter())
                                 .addLast(PacketCodecHandler.INSTANCE)
                                 .addLast(LoginRequestHandler.INSTANCE)
+                                .addLast(HeartBeatRequestHandler.INSTANCE)
                                 .addLast(AuthHandler.INSTANCE)
                                 .addLast(IMHandler.INSTANCE);
                     }

@@ -2,6 +2,8 @@ package com.example.netty.code;
 
 import com.example.netty.packet.group.CreateGroupRequestPacket;
 import com.example.netty.packet.group.CreateGroupResponsePacket;
+import com.example.netty.packet.heart.HeartBeatRequestPacket;
+import com.example.netty.packet.heart.HeartBeatResponsePacket;
 import com.example.netty.packet.login.LoginRequestPacket;
 import com.example.netty.packet.login.LoginResponsePacket;
 import com.example.netty.packet.base.Packet;
@@ -43,6 +45,8 @@ public class PacketCodeC {
         packetTypeMap.put(LOGOUT_RESPONSE, LogoutResponsePacket.class);
         packetTypeMap.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
         packetTypeMap.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
+        packetTypeMap.put(HEARTBEAT_REQUEST, HeartBeatRequestPacket.class);
+        packetTypeMap.put(HEARTBEAT_RESPONSE, HeartBeatResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();

@@ -4,7 +4,10 @@ import com.example.netty.code.Spliter;
 import com.example.netty.common.CommonConfig;
 import com.example.netty.console.ConsoleCommandManager;
 import com.example.netty.console.LoginConsoleCommand;
+import com.example.netty.handler.code.PacketCodecHandler;
 import com.example.netty.handler.group.CreateGroupResponseHandler;
+import com.example.netty.handler.heart.HeartBeatTimerHandler;
+import com.example.netty.handler.im.IMIdleStateHandler;
 import com.example.netty.handler.login.LoginResponseHandler;
 import com.example.netty.handler.logout.LogoutResponseHandler;
 import com.example.netty.handler.message.MessageResponseHandler;
@@ -43,13 +46,15 @@ public class NettyClient {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         socketChannel.pipeline()
+                                .addLast(new IMIdleStateHandler())
                                 .addLast(new Spliter())
-                                .addLast(PacketDecoder.INSTANCE)
+                                .addLast(PacketCodecHandler.INSTANCE)
                                 .addLast(new LoginResponseHandler())
                                 .addLast(new LogoutResponseHandler())
                                 .addLast(new MessageResponseHandler())
                                 .addLast(new CreateGroupResponseHandler())
-                                .addLast(PacketEncoder.INSTANCE);
+                                .addLast(new HeartBeatTimerHandler())
+                                ;
                     }
                 });
 
